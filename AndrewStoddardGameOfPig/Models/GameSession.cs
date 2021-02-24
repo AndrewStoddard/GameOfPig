@@ -31,6 +31,9 @@ namespace AndrewStoddardGameOfPig.Models
         /// </summary>
         private const string playerRoundScoreKey = "playerroundscore";
 
+        /// <summary>
+        /// The game in progress key
+        /// </summary>
         private const string gameInProgressKey = "gip";
 
         /// <summary>
@@ -39,7 +42,7 @@ namespace AndrewStoddardGameOfPig.Models
         /// <value>The session.</value>
         private ISession session { get; set; }
         /// <summary>
-        /// Initializes a new instance of the <see cref="GameSession"/> class.
+        /// Initializes a new instance of the <see cref="GameSession" /> class.
         /// </summary>
         /// <param name="session">The session.</param>
         public GameSession(ISession session)
@@ -80,7 +83,15 @@ namespace AndrewStoddardGameOfPig.Models
         /// <value>The get player round score.</value>
         public int GetPlayerRoundScore => this.session.GetInt32(playerRoundScoreKey) ?? 0;
 
+        /// <summary>
+        /// Sets the game in progress.
+        /// </summary>
+        /// <param name="value">if set to <c>true</c> [value].</param>
         public void SetGameInProgress(bool value) => this.session.SetBoolean(gameInProgressKey, value);
+        /// <summary>
+        /// Gets a value indicating whether this instance is game in progress.
+        /// </summary>
+        /// <value><c>true</c> if this instance is game in progress; otherwise, <c>false</c>.</value>
         public bool IsGameInProgress => this.session.GetBoolean(gameInProgressKey);
     }
 }
