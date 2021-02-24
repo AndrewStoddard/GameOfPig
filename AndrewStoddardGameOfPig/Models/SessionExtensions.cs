@@ -37,7 +37,7 @@ namespace AndrewStoddardGameOfPig.Models
         public static Boolean GetBoolean(this ISession session, string key)
         {
             string value = session.GetString(key);
-            return Boolean.Parse(value);
+            return Boolean.Parse(value ?? "false");
         }
 
     }

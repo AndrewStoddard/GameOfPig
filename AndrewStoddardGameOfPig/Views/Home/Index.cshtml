@@ -9,11 +9,22 @@
     ViewData["Title"] = "Game Of Pigs";
     var session = new GameSession(Context.Session);
 }
-<a asp-action="StartGame" asp-controller="Home" class="btn btn-primary">Start Game</a>
+@if (session.IsGameInProgress == false)
+{
+    <a asp-action="StartGame" asp-controller="Home" class="btn btn-primary">Start Game</a>
 
-<a asp-action="RollDice" asp-controller="Home" class="btn btn-primary">Roll Dice</a>
-<a asp-action="HoldDice" asp-controller="Home" class="btn btn-primary">Hold Dice</a>
-<h4>Round Score: @session.GetPlayerRoundScore</h4>
-<h4>Total Score: @session.GetPlayerTotalScore</h4>
+}
+else
+{
+
+    <a asp-action="RollDice" asp-controller="Home" class="btn btn-primary">Roll Dice</a>
+    <a asp-action="HoldDice" asp-controller="Home" class="btn btn-primary">Hold Dice</a>
+
+    <h4>Your Round Score: @session.GetPlayerRoundScore</h4>
+    <h4> Your Total Score: @session.GetPlayerTotalScore</h4>
+    <h4> CPU Total Score: @session.GetCPUScore</h4>
+}
+
+
 
 

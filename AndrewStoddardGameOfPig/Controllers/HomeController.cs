@@ -18,6 +18,7 @@ namespace AndrewStoddardGameOfPig.Controllers
     /// <seealso cref="Microsoft.AspNetCore.Mvc.Controller" />
     public class HomeController : Controller
     {
+
         /// <summary>
         /// The random
         /// </summary>
@@ -37,6 +38,9 @@ namespace AndrewStoddardGameOfPig.Controllers
         /// <returns>IActionResult.</returns>
         public IActionResult StartGame()
         {
+            GameSession session = new GameSession(HttpContext.Session);
+            session.SetGameInProgress(true);
+
             return View("Index");
         }
 
@@ -46,17 +50,16 @@ namespace AndrewStoddardGameOfPig.Controllers
         /// <returns>IActionResult.</returns>
         public IActionResult RollDice()
         {
-            var session = new GameSession(HttpContext.Session);
-            int die1 = random.Next(1, 6);
-            int die2 = random.Next(1, 6);
-            if (die1 == 1 || die2 == 1)
+            GameSession session = new GameSession(HttpContext.Session);
+            int result = rollDice();
+            if (result == 0)
             {
                 session.SetPlayerRoundScore(0);
+                return RedirectToAction("HoldDice");
 
-                return View("Index");
             }
 
-            session.SetPlayerRoundScore(session.GetPlayerRoundScore + die1 + die2);
+            session.SetPlayerRoundScore(session.GetPlayerRoundScore + result);
             return View("Index");
 
 
@@ -67,13 +70,34 @@ namespace AndrewStoddardGameOfPig.Controllers
         /// <returns>IActionResult.</returns>
         public IActionResult HoldDice()
         {
-            var session = new GameSession(HttpContext.Session);
+            GameSession session = new GameSession(HttpContext.Session);
             session.SetPlayerTotalScore(session.GetPlayerTotalScore + session.GetPlayerRoundScore);
             session.SetPlayerRoundScore(0);
+            int result = rollDice();
+
+            session.SetCPUScore(session.GetCPUScore + result);
+
             return View("Index");
         }
 
 
-       
+
+        /// <summary>
+        /// Rolls the dice.
+        /// </summary>
+        /// <returns>System.Int32.</returns>
+        private int rollDice()
+        {
+            int result = 0;
+            int die1 = random.Next(1, 6);
+            int die2 = random.Next(1, 6);
+            if (die1 != 1 && die2 != 1)
+            {
+                result = die1 + die2;
+            }
+            return result;
+        }
+
+
     }
 }
