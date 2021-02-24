@@ -30,6 +30,9 @@ namespace AndrewStoddardGameOfPig.Models
         /// The player round score key
         /// </summary>
         private const string playerRoundScoreKey = "playerroundscore";
+
+        private const string gameInProgressKey = "gip";
+
         /// <summary>
         /// Gets or sets the session.
         /// </summary>
@@ -76,5 +79,8 @@ namespace AndrewStoddardGameOfPig.Models
         /// </summary>
         /// <value>The get player round score.</value>
         public int GetPlayerRoundScore => this.session.GetInt32(playerRoundScoreKey) ?? 0;
+
+        public void SetGameInProgress(bool value) => this.session.SetBoolean(gameInProgressKey, value);
+        public bool IsGameInProgress => this.session.GetBoolean(gameInProgressKey);
     }
 }
