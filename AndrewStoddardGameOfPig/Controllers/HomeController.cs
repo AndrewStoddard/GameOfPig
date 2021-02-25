@@ -27,9 +27,15 @@ namespace AndrewStoddardGameOfPig.Controllers
         /// <summary>
         /// Indexes this instance.
         /// </summary>
+        /// <param name="die1">The die1.</param>
+        /// <param name="die2">The die2.</param>
+        /// <param name="winMessage">The win message.</param>
         /// <returns>IActionResult.</returns>
-        public IActionResult Index()
+        public IActionResult Index(int? die1 = null, int? die2 = null, string winMessage = null)
         {
+            ViewBag.Die1 = die1;
+            ViewBag.Die2 = die2;
+            ViewBag.WinMessage = winMessage;
             return View();
         }
         /// <summary>
@@ -43,7 +49,7 @@ namespace AndrewStoddardGameOfPig.Controllers
             session.SetGameInProgress(true);
             session.SetIsPlayerTurn(random.Next(2) == 1 ? true : false);
 
-            return View("Index");
+            return RedirectToAction("Index", new { ViewBag.Die1, ViewBag.Die2, ViewBag.WinMessage });
         }
 
         /// <summary>
@@ -58,19 +64,21 @@ namespace AndrewStoddardGameOfPig.Controllers
             {
                 session.SetPlayerRoundScore(0);
                 session.SetIsPlayerTurn(false);
-                return View("Index");
+            return RedirectToAction("Index", new { ViewBag.Die1, ViewBag.Die2, ViewBag.WinMessage });
 
 
             }
 
             session.SetPlayerRoundScore(session.GetPlayerRoundScore + result);
-            return View("Index");
+            return RedirectToAction("Index", new { ViewBag.Die1, ViewBag.Die2, ViewBag.WinMessage });
 
 
         }
         /// <summary>
         /// Holds the dice.
         /// </summary>
+        /// <param name="die1">The die1.</param>
+        /// <param name="die2">The die2.</param>
         /// <returns>IActionResult.</returns>
         public IActionResult HoldDice(int die1, int die2)
         {
@@ -86,7 +94,7 @@ namespace AndrewStoddardGameOfPig.Controllers
             ViewBag.Die2 = die2;
 
 
-            return View("Index");
+            return RedirectToAction("Index", new { ViewBag.Die1, ViewBag.Die2, ViewBag.WinMessage });
         }
         /// <summary>
         /// Lets the computer play
@@ -103,10 +111,14 @@ namespace AndrewStoddardGameOfPig.Controllers
             }
             session.SetIsPlayerTurn(true);
 
-            return View("Index");
+            return RedirectToAction("Index", new { ViewBag.Die1, ViewBag.Die2, ViewBag.WinMessage });
 
         }
 
+        /// <summary>
+        /// Games the over.
+        /// </summary>
+        /// <returns>IActionResult.</returns>
         public IActionResult GameOver()
         {
             GameSession session = new GameSession(HttpContext.Session);
@@ -114,8 +126,11 @@ namespace AndrewStoddardGameOfPig.Controllers
             ViewBag.WinMessage = session.GetPlayerTotalScore > session.GetCPUScore ? "Congrats! You win!" : "You Lose!";
             session.SetGameInProgress(false);
 
-            return View("Index");
+            return RedirectToAction("Index", new { ViewBag.Die1, ViewBag.Die2, ViewBag.WinMessage });
         }
+        /// <summary>
+        /// Resets the game.
+        /// </summary>
         private void resetGame()
         {
             GameSession session = new GameSession(HttpContext.Session);
