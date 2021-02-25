@@ -3,7 +3,7 @@
 // Created          : 02-24-2021
 //
 // Last Modified By : Andrew Stoddard
-// Last Modified On : 02-24-2021
+// Last Modified On : 02-25-2021
 // ***********************************************************************
 using Microsoft.AspNetCore.Http;
 using System;
@@ -36,6 +36,9 @@ namespace AndrewStoddardGameOfPig.Models
         /// </summary>
         private const string gameInProgressKey = "gip";
 
+        /// <summary>
+        /// The player turn key
+        /// </summary>
         private const string playerTurnKey = "playerturn";
 
         /// <summary>
@@ -96,7 +99,15 @@ namespace AndrewStoddardGameOfPig.Models
         /// <value><c>true</c> if this instance is game in progress; otherwise, <c>false</c>.</value>
         public bool IsGameInProgress => this.session.GetBoolean(gameInProgressKey);
 
+        /// <summary>
+        /// Sets the is player turn.
+        /// </summary>
+        /// <param name="value">if set to <c>true</c> [value].</param>
         public void SetIsPlayerTurn(bool value) => this.session.SetBoolean(playerTurnKey, value);
+        /// <summary>
+        /// Gets a value indicating whether [get is player turn].
+        /// </summary>
+        /// <value><c>true</c> if [get is player turn]; otherwise, <c>false</c>.</value>
         public bool GetIsPlayerTurn => this.session.GetBoolean(playerTurnKey);
     }
 }
