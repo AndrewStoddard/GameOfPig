@@ -11,7 +11,16 @@
 }
 @if (session.IsGameInProgress == false)
 {
-    <a asp-action="StartGame" asp-controller="Home" class="btn btn-primary">Start Game</a>
+<div class="container-fluid">
+    <div @(ViewBag.WinMessage != null ? "" : "hidden")>
+        <h2>@ViewBag.WinMessage</h2>
+        <h4>CPU Score: @session.GetCPUScore</h4>
+        <h4>Player Score: @session.GetPlayerTotalScore</h4>
+    </div>
+    <a asp-action="StartGame" asp-controller="Home" class="btn btn-primary">Start New Game</a>
+
+</div>
+
 
 }
 else

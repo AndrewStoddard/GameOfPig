@@ -39,6 +39,7 @@ namespace AndrewStoddardGameOfPig.Controllers
         public IActionResult StartGame()
         {
             GameSession session = new GameSession(HttpContext.Session);
+            this.resetGame();
             session.SetGameInProgress(true);
             session.SetIsPlayerTurn(random.Next(2) == 1 ? true : false);
 
@@ -75,6 +76,10 @@ namespace AndrewStoddardGameOfPig.Controllers
         {
             GameSession session = new GameSession(HttpContext.Session);
             session.SetPlayerTotalScore(session.GetPlayerTotalScore + session.GetPlayerRoundScore);
+            if (session.GetPlayerTotalScore >= 20)
+            {
+                return RedirectToAction("GameOver");
+            }
             session.SetPlayerRoundScore(0);
             session.SetIsPlayerTurn(false);
             ViewBag.Die1 = die1;
@@ -92,10 +97,31 @@ namespace AndrewStoddardGameOfPig.Controllers
             GameSession session = new GameSession(HttpContext.Session);
             int result = rollDice();
             session.SetCPUScore(session.GetCPUScore + result);
+            if (session.GetCPUScore >= 20)
+            {
+                return RedirectToAction("GameOver");
+            }
             session.SetIsPlayerTurn(true);
 
             return View("Index");
 
+        }
+
+        public IActionResult GameOver()
+        {
+            GameSession session = new GameSession(HttpContext.Session);
+
+            ViewBag.WinMessage = session.GetPlayerTotalScore > session.GetCPUScore ? "Congrats! You win!" : "You Lose!";
+            session.SetGameInProgress(false);
+
+            return View("Index");
+        }
+        private void resetGame()
+        {
+            GameSession session = new GameSession(HttpContext.Session);
+            session.SetCPUScore(0);
+            session.SetPlayerRoundScore(0);
+            session.SetPlayerTotalScore(0);
         }
 
 
