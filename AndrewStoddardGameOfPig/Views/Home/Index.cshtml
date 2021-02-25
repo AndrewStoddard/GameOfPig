@@ -3,21 +3,25 @@
 // Created          : 02-24-2021
 //
 // Last Modified By : Andrew Stoddard
-// Last Modified On : 02-24-2021
+// Last Modified On : 02-25-2021
 // ***********************************************************************-->
 @{
     ViewData["Title"] = "Game Of Pigs";
     var session = new GameSession(Context.Session);
 }
+
 @if (session.IsGameInProgress == false)
 {
-<div class="container-fluid">
-    <div @(ViewBag.WinMessage != null ? "" : "hidden")>
+<div class="row justify-content-center" >
+    <div @(ViewBag.WinMessage != null ? "" : "hidden") class="col-md-2 d-flex justify-content-center">
         <h2>@ViewBag.WinMessage</h2>
         <h4>CPU Score: @session.GetCPUScore</h4>
         <h4>Player Score: @session.GetPlayerTotalScore</h4>
     </div>
-    <a asp-action="StartGame" asp-controller="Home" class="btn btn-primary">Start New Game</a>
+    <div class="col-md-2 d-flex justify-content-center">
+        <a asp-action="StartGame" asp-controller="Home" class="btn btn-primary">Start New Game</a>
+
+    </div>
 
 </div>
 
@@ -25,18 +29,35 @@
 }
 else
 {
-<h2>Turn: @(session.GetIsPlayerTurn ? "Player" : "Computer") </h2>
-<h3>Die 1: @(ViewBag.Die1 != null ? ViewBag.Die1 : "1" ) </h3>
-<h3>Die 2: @(ViewBag.Die2 != null ? ViewBag.Die2 : "1" )</h3>
+<div class="row">
 
-    <a asp-action="RollDice" asp-controller="Home" class="btn btn-primary" hidden="@(!session.GetIsPlayerTurn)">Roll Dice</a>
-    <a asp-action="HoldDice" asp-controller="Home" class="btn btn-primary" asp-route-die1="@ViewBag.Die1" asp-route-die2="@ViewBag.Die2" hidden="@(!session.GetIsPlayerTurn)">Hold Dice</a>
-    <a asp-action="ComputerPlay" asp-controller="Home" class="btn btn-primary" hidden="@(session.GetIsPlayerTurn)">Computer Roll Dice</a>
+    <div class="col-md-2 d-flex justify-content-center">
+        <h2>Turn: @(session.GetIsPlayerTurn ? "Player" : "Computer") </h2>
+        <a asp-action="RollDice" asp-controller="Home" class="btn btn-primary" hidden="@(!session.GetIsPlayerTurn)">Roll Dice</a>
+        <a asp-action="HoldDice" asp-controller="Home" class="btn btn-primary" asp-route-die1="@ViewBag.Die1" asp-route-die2="@ViewBag.Die2" hidden="@(!session.GetIsPlayerTurn)">Hold Dice</a>
+        <a asp-action="ComputerPlay" asp-controller="Home" class="btn btn-primary" hidden="@(session.GetIsPlayerTurn)">Computer Roll Dice</a>
+
+        
+    </div>
+    <div class="col-md-8 d-flex justify-content-center">
+        <h3>Die 1: @(ViewBag.Die1 != null ? ViewBag.Die1 : "1" ) </h3>
+        <h3>Die 2: @(ViewBag.Die2 != null ? ViewBag.Die2 : "1" )</h3>
+    </div>
+
+    <div class="col-md-2 d-flex justify-content-center">
+        <h4>Your Round Score: @session.GetPlayerRoundScore</h4>
+        <h4> Your Total Score: @session.GetPlayerTotalScore</h4>
+        <h4> CPU Total Score: @session.GetCPUScore</h4>
+    </div>
 
 
-    <h4>Your Round Score: @session.GetPlayerRoundScore</h4>
-    <h4> Your Total Score: @session.GetPlayerTotalScore</h4>
-    <h4> CPU Total Score: @session.GetCPUScore</h4>
+
+</div>
+
+
+   
+
+    
 }
 
 
