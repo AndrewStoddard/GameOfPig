@@ -56,7 +56,9 @@ namespace AndrewStoddardGameOfPig.Controllers
             if (result == 0)
             {
                 session.SetPlayerRoundScore(0);
-                return RedirectToAction("HoldDice");
+                session.SetIsPlayerTurn(false);
+                return View("Index");
+
 
             }
 
@@ -69,12 +71,14 @@ namespace AndrewStoddardGameOfPig.Controllers
         /// Holds the dice.
         /// </summary>
         /// <returns>IActionResult.</returns>
-        public IActionResult HoldDice()
+        public IActionResult HoldDice(int die1, int die2)
         {
             GameSession session = new GameSession(HttpContext.Session);
             session.SetPlayerTotalScore(session.GetPlayerTotalScore + session.GetPlayerRoundScore);
             session.SetPlayerRoundScore(0);
             session.SetIsPlayerTurn(false);
+            ViewBag.Die1 = die1;
+            ViewBag.Die2 = die2;
 
 
             return View("Index");
@@ -105,6 +109,8 @@ namespace AndrewStoddardGameOfPig.Controllers
             int result = 0;
             int die1 = random.Next(1, 6);
             int die2 = random.Next(1, 6);
+            ViewBag.Die1 = die1;
+            ViewBag.Die2 = die2;
             if (die1 != 1 && die2 != 1)
             {
                 result = die1 + die2;
