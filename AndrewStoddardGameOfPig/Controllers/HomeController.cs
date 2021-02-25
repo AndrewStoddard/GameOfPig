@@ -18,12 +18,10 @@ namespace AndrewStoddardGameOfPig.Controllers
     /// <seealso cref="Microsoft.AspNetCore.Mvc.Controller" />
     public class HomeController : Controller
     {
-
         /// <summary>
         /// The random
         /// </summary>
         private Random random = new Random();
-
         /// <summary>
         /// Indexes this instance.
         /// </summary>
@@ -31,11 +29,8 @@ namespace AndrewStoddardGameOfPig.Controllers
         /// <param name="die2">The die2.</param>
         /// <param name="winMessage">The win message.</param>
         /// <returns>IActionResult.</returns>
-        public IActionResult Index(int? die1 = null, int? die2 = null, string winMessage = null)
+        public IActionResult Index()
         {
-            ViewBag.Die1 = die1;
-            ViewBag.Die2 = die2;
-            ViewBag.WinMessage = winMessage;
             return View();
         }
         /// <summary>
@@ -48,10 +43,8 @@ namespace AndrewStoddardGameOfPig.Controllers
             this.resetGame();
             session.SetGameInProgress(true);
             session.SetIsPlayerTurn(random.Next(2) == 1 ? true : false);
-
-            return RedirectToAction("Index", new { ViewBag.Die1, ViewBag.Die2, ViewBag.WinMessage });
+            return RedirectToAction("Index");
         }
-
         /// <summary>
         /// Rolls the dice.
         /// </summary>
@@ -64,15 +57,10 @@ namespace AndrewStoddardGameOfPig.Controllers
             {
                 session.SetPlayerRoundScore(0);
                 session.SetIsPlayerTurn(false);
-            return RedirectToAction("Index", new { ViewBag.Die1, ViewBag.Die2, ViewBag.WinMessage });
-
-
+                return RedirectToAction("Index");
             }
-
             session.SetPlayerRoundScore(session.GetPlayerRoundScore + result);
-            return RedirectToAction("Index", new { ViewBag.Die1, ViewBag.Die2, ViewBag.WinMessage });
-
-
+            return RedirectToAction("Index");
         }
         /// <summary>
         /// Holds the dice.
@@ -80,7 +68,7 @@ namespace AndrewStoddardGameOfPig.Controllers
         /// <param name="die1">The die1.</param>
         /// <param name="die2">The die2.</param>
         /// <returns>IActionResult.</returns>
-        public IActionResult HoldDice(int die1, int die2)
+        public IActionResult HoldDice()
         {
             GameSession session = new GameSession(HttpContext.Session);
             session.SetPlayerTotalScore(session.GetPlayerTotalScore + session.GetPlayerRoundScore);
@@ -90,11 +78,7 @@ namespace AndrewStoddardGameOfPig.Controllers
             }
             session.SetPlayerRoundScore(0);
             session.SetIsPlayerTurn(false);
-            ViewBag.Die1 = die1;
-            ViewBag.Die2 = die2;
-
-
-            return RedirectToAction("Index", new { ViewBag.Die1, ViewBag.Die2, ViewBag.WinMessage });
+            return RedirectToAction("Index");
         }
         /// <summary>
         /// Lets the computer play
@@ -111,10 +95,9 @@ namespace AndrewStoddardGameOfPig.Controllers
             }
             session.SetIsPlayerTurn(true);
 
-            return RedirectToAction("Index", new { ViewBag.Die1, ViewBag.Die2, ViewBag.WinMessage });
+            return RedirectToAction("Index");
 
         }
-
         /// <summary>
         /// Games the over.
         /// </summary>
@@ -123,10 +106,10 @@ namespace AndrewStoddardGameOfPig.Controllers
         {
             GameSession session = new GameSession(HttpContext.Session);
 
-            ViewBag.WinMessage = session.GetPlayerTotalScore > session.GetCPUScore ? "Congrats! You win!" : "You Lose!";
+            session.SetWinMessage(session.GetPlayerTotalScore > session.GetCPUScore ? "Congrats! You win!" : "You Lose!");
             session.SetGameInProgress(false);
 
-            return RedirectToAction("Index", new { ViewBag.Die1, ViewBag.Die2, ViewBag.WinMessage });
+            return RedirectToAction("Index");
         }
         /// <summary>
         /// Resets the game.
@@ -137,21 +120,22 @@ namespace AndrewStoddardGameOfPig.Controllers
             session.SetCPUScore(0);
             session.SetPlayerRoundScore(0);
             session.SetPlayerTotalScore(0);
+            session.SetWinMessage("");
+            session.SetDie1Value(1);
+            session.SetDie2Value(1);
         }
-
-
-
         /// <summary>
         /// Rolls the dice.
         /// </summary>
         /// <returns>System.Int32.</returns>
         private int rollDice()
         {
+            GameSession session = new GameSession(HttpContext.Session);
             int result = 0;
             int die1 = random.Next(1, 6);
             int die2 = random.Next(1, 6);
-            ViewBag.Die1 = die1;
-            ViewBag.Die2 = die2;
+            session.SetDie1Value(die1);
+            session.SetDie2Value(die2);
             if (die1 != 1 && die2 != 1)
             {
                 result = die1 + die2;

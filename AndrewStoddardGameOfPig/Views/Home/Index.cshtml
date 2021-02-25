@@ -8,15 +8,15 @@
 @{
     ViewData["Title"] = "Game Of Pigs";
     GameSession session = new GameSession(Context.Session);
-    string die1Image = $"~/../../images/dice{(ViewBag.Die1 != null ? ViewBag.Die1 : "1")}.png";
-    string die2Image = $"~/../../images/dice{(ViewBag.Die2 != null ? ViewBag.Die2 : "1")}.png";
+    string die1Image = $"~/../../images/dice{session.GetDie1Value}.png";
+    string die2Image = $"~/../../images/dice{session.GetDie2Value}.png";
 }
 
 @if (session.IsGameInProgress == false)
 {
 <div class="row justify-content-center text-center" >
-    <div @(ViewBag.WinMessage != null ? "" : "hidden") class="col-md-2 justify-content-center">
-        <h2>@ViewBag.WinMessage</h2>
+    <div @(!string.IsNullOrEmpty(session.GetWinMessage) ? "" : "hidden") class="col-md-2 justify-content-center">
+        <h2>@session.GetWinMessage</h2>
         <h4>CPU Score: @session.GetCPUScore</h4>
         <h4>Player Score: @session.GetPlayerTotalScore</h4>
     </div>
@@ -36,7 +36,7 @@ else
     <div class="col-md-3 text-left" style="padding-left:30px">
         <h2>Turn: @(session.GetIsPlayerTurn ? "Player" : "Computer") </h2>
         <a asp-action="RollDice" asp-controller="Home" class="btn btn-primary" hidden="@(!session.GetIsPlayerTurn)">Roll Dice</a>
-        <a asp-action="HoldDice" asp-controller="Home" class="btn btn-primary" asp-route-die1="@ViewBag.Die1" asp-route-die2="@ViewBag.Die2" hidden="@(!session.GetIsPlayerTurn)">Hold Dice</a>
+        <a asp-action="HoldDice" asp-controller="Home" class="btn btn-primary" hidden="@(!session.GetIsPlayerTurn)">Hold Dice</a>
         <a asp-action="ComputerPlay" asp-controller="Home" class="btn btn-primary" hidden="@(session.GetIsPlayerTurn)">Computer Roll Dice</a>
 
 

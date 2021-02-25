@@ -42,6 +42,23 @@ namespace AndrewStoddardGameOfPig.Models
         private const string playerTurnKey = "playerturn";
 
         /// <summary>
+        /// The die1 value key
+        /// </summary>
+        private const string die1ValueKey = "die1value";
+
+        /// <summary>
+        /// The die2 value key
+        /// </summary>
+        private const string die2ValueKey = "die2value";
+
+        /// <summary>
+        /// The win message key
+        /// </summary>
+        private const string winMessageKey = "playerturn";
+
+
+
+        /// <summary>
         /// Gets or sets the session.
         /// </summary>
         /// <value>The session.</value>
@@ -109,5 +126,39 @@ namespace AndrewStoddardGameOfPig.Models
         /// </summary>
         /// <value><c>true</c> if [get is player turn]; otherwise, <c>false</c>.</value>
         public bool GetIsPlayerTurn => this.session.GetBoolean(playerTurnKey);
+
+        /// <summary>
+        /// Sets the die1 value.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        public void SetDie1Value(int value) => this.session.SetInt32(die1ValueKey, value);
+        /// <summary>
+        /// Gets the get die1 value.
+        /// </summary>
+        /// <value>The get die1 value.</value>
+        public int GetDie1Value => this.session.GetInt32(die1ValueKey) ?? 1;
+
+        /// <summary>
+        /// Sets the die2 value.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        public void SetDie2Value(int value) => this.session.SetInt32(die2ValueKey, value);
+        /// <summary>
+        /// Gets the get die2 value.
+        /// </summary>
+        /// <value>The get die2 value.</value>
+        public int GetDie2Value => this.session.GetInt32(die2ValueKey) ?? 1;
+
+        /// <summary>
+        /// Sets the win message.
+        /// </summary>
+        /// <param name="message">The message.</param>
+        public void SetWinMessage(string message) => this.session.SetString(winMessageKey, message);
+        /// <summary>
+        /// Gets the get win message.
+        /// </summary>
+        /// <value>The get win message.</value>
+        public string GetWinMessage => this.session.GetString(winMessageKey);
+
     }
 }
