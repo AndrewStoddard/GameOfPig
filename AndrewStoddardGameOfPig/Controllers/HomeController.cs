@@ -40,6 +40,7 @@ namespace AndrewStoddardGameOfPig.Controllers
         {
             GameSession session = new GameSession(HttpContext.Session);
             session.SetGameInProgress(true);
+            session.SetIsPlayerTurn(random.Next(2) == 1 ? true : false);
 
             return View("Index");
         }
@@ -73,11 +74,24 @@ namespace AndrewStoddardGameOfPig.Controllers
             GameSession session = new GameSession(HttpContext.Session);
             session.SetPlayerTotalScore(session.GetPlayerTotalScore + session.GetPlayerRoundScore);
             session.SetPlayerRoundScore(0);
-            int result = rollDice();
+            session.SetIsPlayerTurn(false);
 
-            session.SetCPUScore(session.GetCPUScore + result);
 
             return View("Index");
+        }
+        /// <summary>
+        /// Lets the computer play
+        /// </summary>
+        /// <returns>IActionResult.</returns>
+        public IActionResult ComputerPlay()
+        {
+            GameSession session = new GameSession(HttpContext.Session);
+            int result = rollDice();
+            session.SetCPUScore(session.GetCPUScore + result);
+            session.SetIsPlayerTurn(true);
+
+            return View("Index");
+
         }
 
 

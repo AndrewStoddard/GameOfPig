@@ -36,6 +36,8 @@ namespace AndrewStoddardGameOfPig.Models
         /// </summary>
         private const string gameInProgressKey = "gip";
 
+        private const string playerTurnKey = "playerturn";
+
         /// <summary>
         /// Gets or sets the session.
         /// </summary>
@@ -93,5 +95,8 @@ namespace AndrewStoddardGameOfPig.Models
         /// </summary>
         /// <value><c>true</c> if this instance is game in progress; otherwise, <c>false</c>.</value>
         public bool IsGameInProgress => this.session.GetBoolean(gameInProgressKey);
+
+        public void SetIsPlayerTurn(bool value) => this.session.SetBoolean(playerTurnKey, value);
+        public bool GetIsPlayerTurn => this.session.GetBoolean(playerTurnKey);
     }
 }
