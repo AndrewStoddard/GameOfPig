@@ -8,6 +8,8 @@
 @{
     ViewData["Title"] = "Game Of Pigs";
     GameSession session = new GameSession(Context.Session);
+    string die1Image = $"~/../../images/dice{(ViewBag.Die1 != null ? ViewBag.Die1 : "1")}.png";
+    string die2Image = $"~/../../images/dice{(ViewBag.Die2 != null ? ViewBag.Die2 : "1")}.png";
 }
 
 @if (session.IsGameInProgress == false)
@@ -37,11 +39,13 @@ else
         <a asp-action="HoldDice" asp-controller="Home" class="btn btn-primary" asp-route-die1="@ViewBag.Die1" asp-route-die2="@ViewBag.Die2" hidden="@(!session.GetIsPlayerTurn)">Hold Dice</a>
         <a asp-action="ComputerPlay" asp-controller="Home" class="btn btn-primary" hidden="@(session.GetIsPlayerTurn)">Computer Roll Dice</a>
 
-        
+
     </div>
-    <div class="col-md-6 text-center">
-        <h3>Die 1: @(ViewBag.Die1 != null ? ViewBag.Die1 : "1" ) </h3>
-        <h3>Die 2: @(ViewBag.Die2 != null ? ViewBag.Die2 : "1" )</h3>
+    <div class="col-md-3 text-center">
+        <img src=@die1Image class="rounded" />
+    </div>
+    <div class="col-md-3 text-center">
+        <img src=@die2Image class="rounded" />
     </div>
 
     <div class="col-md-3 text-right" style="padding-right:30px">
