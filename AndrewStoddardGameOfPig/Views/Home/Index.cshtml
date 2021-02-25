@@ -7,7 +7,7 @@
 // ***********************************************************************-->
 @{
     ViewData["Title"] = "Game Of Pigs";
-    var session = new GameSession(Context.Session);
+    GameSession session = new GameSession(Context.Session);
 }
 
 @if (session.IsGameInProgress == false)
